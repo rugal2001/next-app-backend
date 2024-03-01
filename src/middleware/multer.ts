@@ -5,9 +5,11 @@ import { CloudinaryStorage } from "multer-storage-cloudinary";
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary.v2,
-//   params: {
-//     folder: "new-folder",
-//   },
+  params: { 
+    // @ts-ignore*
+    folder: () => "new-folder",
+
+  },
 });
 
 // const fileFilter = (req:express.Request ,file,cb)=>{

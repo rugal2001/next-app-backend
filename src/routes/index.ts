@@ -5,6 +5,7 @@ import {
   getPost,
   createPost,
   deletePost,
+  addPost2,
 } from "../controllers/PostController";
 import multer, { Multer } from "multer";
 const storage = multer.memoryStorage();
@@ -25,40 +26,7 @@ router.get("/posts/:id", getPost);
 //router.put("/posts/:id", upload.single("image"), updatePost);
 router.delete("/posts/:id", deletePost);
 
-router.post(
-  "/uploadImg",
-  upload.single("image"),
-  (req: express.Request, res: express.Response) => {
-    if (req.file) {
-      console.log({ r: req.file });
-
-      //   const file = dataUri(req).content;
-      //   cloudinary.v2.uploader
-      //     .upload(file)
-      //     .then((result: any) => {
-      //       const image = result.url;
-      //       return res.status(200).json({
-      //         message: "Image uploaded successfully to Cloudinary",
-      //         data: {
-      //           image,
-      //         },
-      //       });
-      //     })
-      //     .catch((error: any) =>
-      //       res.status(400).json({
-      //         message: "Something went wrong while processing your request",
-      //         data: {
-      //           error,
-      //         },
-      //       })
-      //     );
-    } else {
-      return res.status(400).json({
-        message: "No file uploaded",
-      });
-    }
-  }
-);
+router.post("/upload-img", upload.single("image"), addPost2);
 
 export default router;
 

@@ -44,6 +44,25 @@ export const createPost = async (
     return response.status(400);
   }
 };
+/////////////////////////////////////////////////////////////////
+
+export const addPost2 = (req: express.Request, res: express.Response) => {
+  const { name, contenue } = req.body;
+  if (req.file) {
+    console.log({ r: req.file });
+    res.status(200).json({ name, contenue, file: req.file });
+    const post = new PostModel({
+      name,
+      contenue,
+      imagePath: req.file.path,
+    })
+    post.save();
+  } else {
+    return res.status(400).json({
+      message: "No file uploaded",
+    });
+  }
+};
 
 ////////////////////////////////////////////////////////////////////////////
 

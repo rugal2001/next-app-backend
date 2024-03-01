@@ -11,7 +11,7 @@ const app = express();
 const port = 4000;
 
 app.use(express.json());
-app.use(express.static(resolve(__dirname, 'src/public')));
+// app.use(express.static(resolve(__dirname, 'src/public')));
 app.use(urlencoded({ extended: false }));
 app.use(json());
 // app.use('*', cloudinaryConfig);
@@ -47,8 +47,4 @@ app.listen(port, () => {
 
 
 
-
-function resolve(__dirname: string, arg1: string): string {
-  throw new Error("Function not implemented.");
-}
 
