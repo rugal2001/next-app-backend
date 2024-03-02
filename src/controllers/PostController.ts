@@ -1,7 +1,5 @@
 import express, { request } from "express";
 import { PostModel } from "../db/post";
-// import { upload } from "../middleware/multer";
-//import uploadToCloudinary from "../utils/cloudinary";
 
 export const getAllPosts = async (
   request: express.Request,
@@ -33,10 +31,14 @@ export const createPost = async (
   response: express.Response
 ) => {
   try {
-    const { name, contenue } = request.body;
+    const { name, contenue, image } = request.body;
+    console.log("this is name ============> ",name)
+    console.log("this is contenue ============> ",contenue)
+    console.log("this is image ============> ",image)
     const post = new PostModel({
       name,
       contenue,
+      image,
     });
     await post.save();
     return response.status(200).json({ message: "Post Created", data: post });
@@ -46,17 +48,10 @@ export const createPost = async (
 };
 /////////////////////////////////////////////////////////////////
 
-export const addPost2 = (req: express.Request, res: express.Response) => {
-  const { name, contenue } = req.body;
+export const uploadImg = (req: express.Request, res: express.Response) => {
   if (req.file) {
     console.log({ r: req.file });
-    res.status(200).json({ name, contenue, file: req.file });
-    const post = new PostModel({
-      name,
-      contenue,
-      imagePath: req.file.path,
-    })
-    post.save();
+    res.status(200).json( req.file.path );
   } else {
     return res.status(400).json({
       message: "No file uploaded",
@@ -66,21 +61,7 @@ export const addPost2 = (req: express.Request, res: express.Response) => {
 
 ////////////////////////////////////////////////////////////////////////////
 
-// export const uploadImage = async (
-//   request: express.Request,
-//   response: express.Response
-// ) => {
-//   try {
-//     if (!request.file) {
-//       return response.status(400).json({ message: "error to upload image" });
-//     }
-//     const imageURL = await uploadToCloudinary(request.file);
-//     response.status(200).json({ imageURL });
-//   } catch (error) {
-//     console.error("Error uploading image:", error);
-//     response.status(500).json({ message: "Internal server error" });
-//   }
-// };
+
 
 ////////////////////////////////////////////////////////////////////////////
 // export const addPost = async (
