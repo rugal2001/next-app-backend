@@ -1,5 +1,8 @@
 import express, { request } from "express";
 import { PostModel } from "../db/post";
+import {User} from '../db/user'
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
 
 export const getAllPosts = async (
   request: express.Request,
@@ -64,35 +67,30 @@ export const uploadImg = (req: express.Request, res: express.Response) => {
 
 
 ////////////////////////////////////////////////////////////////////////////
-// export const addPost = async (
-//   request: express.Request,
-//   response: express.Response
-// ) => {
-//   try {
-//     const { name, contenue } = request.body;
-//     console.log("this is name ==========> ", name);
-//     console.log("this is contenue ==========> ", contenue);
-//     const result = await cloudinary.v2.uploader.upload(request.file?.path);
+ export const register = async (req : express.Request, res : express.Response) => {
+  const { firstname, lastname, email, password, role } = req.body;
+  const hashedPassword = await bcrypt.hash(password,12);
+  const user = await User.create({
+    firstname,
+    lastname,
+    email,
+    password : hashedPassword,
+    role,
+  });
+  const token = jwt.sign(
+    {user_id: user._id},
+    process.env.JWT_SECRET,
+    {
+      expiresIn : "5h",
+    }
+  );
+  res.status(200).json({
+    status : 'success',
+    token,
+    user,
+  })
+}
 
-//     console.log("error here");
-//     console.log("this is result ", result);
-//     const post = new PostModel({
-//       name: name,
-//       contenue: contenue,
-//       image: result.secure_url,
-//     });
-//     console.log("this is the secure url : ", result.secure_url);
-//     await post.save();
-//     response
-//       .status(201)
-//       .json({ message: "Post created successfully", post: post });
-//   } catch (error) {
-//     console.log(error);
-//     response.status(400).json({
-//       message: "failed to upload the post uuuuuuuuuuuuuuuuuuuuuuuu!!",
-//     });
-//   }
-// };
 
 /////////////////////////////////////////////////////////////////////////
 // export const updatePost = async (

@@ -5,7 +5,8 @@ import {
   getPost,
   createPost,
   deletePost,
-  uploadImg
+  uploadImg,
+  register
 } from "../controllers/PostController";
 import multer, { Multer } from "multer";
 const storage = multer.memoryStorage();
@@ -24,9 +25,6 @@ router.get("/posts/:id", getPost);
 router.post("/upload-img", upload.single("image"), uploadImg);
 router.post("/posts", createPost);
 router.delete("/posts/:id", deletePost);
-
-
+router.post("/register", register);
 
 export default router;
-
-
