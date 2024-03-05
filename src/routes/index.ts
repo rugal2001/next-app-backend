@@ -6,8 +6,9 @@ import {
   createPost,
   deletePost,
   uploadImg,
-  register
 } from "../controllers/PostController";
+
+import { register, login } from "../controllers/UserController";
 import multer, { Multer } from "multer";
 const storage = multer.memoryStorage();
 import upload from "../middleware/multer";
@@ -20,11 +21,15 @@ cloudinary.v2.config({
 
 const router = express.Router();
 
-router.get("/posts", getAllPosts);
+import { authenticateUser } from '../middleware/auth';
+
+router.get("/posts",authenticateUser, getAllPosts);
 router.get("/posts/:id", getPost);
 router.post("/upload-img", upload.single("image"), uploadImg);
 router.post("/posts", createPost);
 router.delete("/posts/:id", deletePost);
+
 router.post("/register", register);
+router.post("/login", login);
 
 export default router;
