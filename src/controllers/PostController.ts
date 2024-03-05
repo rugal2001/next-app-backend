@@ -1,6 +1,5 @@
 import express, { request } from "express";
 import { PostModel } from "../db/post";
-import {User} from '../db/user'
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -35,9 +34,6 @@ export const createPost = async (
 ) => {
   try {
     const { name, contenue, image } = request.body;
-    console.log("this is name ============> ",name)
-    console.log("this is contenue ============> ",contenue)
-    console.log("this is image ============> ",image)
     const post = new PostModel({
       name,
       contenue,
@@ -67,29 +63,7 @@ export const uploadImg = (req: express.Request, res: express.Response) => {
 
 
 ////////////////////////////////////////////////////////////////////////////
- export const register = async (req : express.Request, res : express.Response) => {
-  const { firstname, lastname, email, password, role } = req.body;
-  const hashedPassword = await bcrypt.hash(password,12);
-  const user = await User.create({
-    firstname,
-    lastname,
-    email,
-    password : hashedPassword,
-    role,
-  });
-  const token = jwt.sign(
-    {user_id: user._id},
-    process.env.JWT_SECRET,
-    {
-      expiresIn : "5h",
-    }
-  );
-  res.status(200).json({
-    status : 'success',
-    token,
-    user,
-  })
-}
+ 
 
 
 /////////////////////////////////////////////////////////////////////////
