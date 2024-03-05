@@ -3,6 +3,7 @@ import { PostModel } from "../db/post";
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
+//////////////////////////////////////////////////////
 export const getAllPosts = async (
   request: express.Request,
   response: express.Response
@@ -14,6 +15,7 @@ export const getAllPosts = async (
     return response.status(400);
   }
 };
+////////////////////////////////////////////////////////
 
 export const getPost = async (
   request: express.Request,
