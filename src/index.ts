@@ -11,20 +11,14 @@ const app = express();
 const port = 4000;
 
 app.use(express.json());
-// app.use(express.static(resolve(__dirname, 'src/public')));
 app.use(urlencoded({ extended: false }));
 app.use(json());
-// app.use('*', cloudinaryConfig);
 
 
 
 app.use(cors());
 app.use("/", router);
 
-
-
-// app.use(bodyParser.json({ limit: '50mb' }));
-// app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 /////////////////////////////////////////////////////
 ////////////// DATABASE CONFIGURATION  //////////////
