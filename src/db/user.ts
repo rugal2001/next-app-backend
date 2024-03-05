@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 const userSchema = new mongoose.Schema({
-  firstname: {
+  firstName: {
     type: String,
     Required: true,
   },
-  lastname: {
+  lastName: {
     type: String,
     Required: true,
   },
@@ -25,6 +25,6 @@ const userSchema = new mongoose.Schema({
   }
 },{timestamps : true});
 
+export const UserModel = mongoose.model('user',userSchema);
 
-export const User = mongoose.model('User',userSchema);
-module.exports = User;
+//export const PostModel = mongoose.model('post' , PostSchema);
