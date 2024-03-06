@@ -13,10 +13,7 @@ export const authenticateUser = (
   next: NextFunction
 ) => {
   // Extract the JWT token from the Authorization header
-  const token = req.headers["authorization"]?.split(' ')[1];
-  
-  console.log("this is backend token ==> " ,token)
-  console.log("Request headers: ", req.headers);
+  const token = req.headers["authorization"]?.split(" ")[1];
 
   if (!token) {
     return res
