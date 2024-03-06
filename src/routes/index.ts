@@ -24,10 +24,10 @@ const router = express.Router();
 import { authenticateUser } from '../middleware/auth';
 
 router.get("/posts",authenticateUser, getAllPosts);
-router.get("/posts/:id", getPost);
+router.get("/posts/:id",authenticateUser, getPost);
 router.post("/upload-img", upload.single("image"), uploadImg);
-router.post("/posts", createPost);
-router.delete("/posts/:id", deletePost);
+router.post("/posts", authenticateUser,createPost);
+router.delete("/posts/:id",authenticateUser, deletePost);
 
 router.post("/register", register);
 router.post("/login", login);
