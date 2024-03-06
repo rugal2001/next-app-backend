@@ -44,6 +44,7 @@ export const createPost = async (
     await post.save();
     return response.status(200).json({ message: "Post Created", data: post });
   } catch (error) {
+    console.log("there is no data to push")
     return response.status(400);
   }
 };
