@@ -10,11 +10,12 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "allowJs": true,
-    "rootDir": "src",
+    "rootDir": "./src",
+    "baseUrl": ".",
     "outDir": "dist",
     "typeRoots": ["node_modules/@types"]
   },
-  "include": ["src/**/*"]
+  "include": ["./src/**/*"]
 }
 
 
