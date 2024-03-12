@@ -6,6 +6,14 @@ const bodyParser = require("body-parser");
 // import { cloudinaryConfig ,uploader } from '../src/utils/cloudinary';
 // import {upload ,  from '../src/middleware/multer'
 
+declare global {
+  namespace Express {
+    interface Request {
+      user: Record<string, any>;
+    }
+  }
+}
+
 const app = express();
 const port = 4000;
 
