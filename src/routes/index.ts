@@ -5,10 +5,17 @@ import {
   getPost,
   createPost,
   deletePost,
-  uploadImg,
+  updatePost,
 } from "../controllers/PostController";
 
-import { register, login } from "../controllers/UserController";
+import {
+  register,
+  login,
+  getUser,
+  updateUser,
+  getUserById
+} from "../controllers/UserController";
+import { uploadImg } from "../controllers/ImageController";
 import multer, { Multer } from "multer";
 const storage = multer.memoryStorage();
 import upload from "../middleware/multer";
@@ -21,15 +28,24 @@ cloudinary.v2.config({
 
 const router = express.Router();
 
-import { authenticateUser } from '../middleware/auth';
+import { authenticateUser } from "../middleware/auth";
 
-router.get("/posts",authenticateUser, getAllPosts);
-router.get("/posts/:id",authenticateUser, getPost);
-router.post("/upload-img", upload.single("image"), uploadImg);
-router.post("/posts", authenticateUser,createPost);
-router.delete("/posts/:id",authenticateUser, deletePost);
+router.get("/posts", authenticateUser, getAllPosts);
+router.get("/posts/:id", authenticateUser, getPost);
+router.post(
+  "/upload-img",
+  [authenticateUser, upload.single("image")],
+  uploadImg
+);
+router.post("/posts", authenticateUser, createPost);
+router.put("/posts/:id", updatePost);
+router.delete("/posts/:id", authenticateUser, deletePost);
 
 router.post("/register", register);
 router.post("/login", login);
+
+router.get("/me", authenticateUser, getUser);
+router.get("/user/:id", authenticateUser, getUserById);
+router.put("/user/:id", authenticateUser, updateUser);
 
 export default router;
