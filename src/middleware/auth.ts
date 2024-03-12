@@ -1,14 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 
-// Define a custom interface that extends the default Request interface
-interface AuthenticatedRequest extends Request {
-  user?: { userId: string }; // Define the structure of the user object
-}
-
 // Middleware function to authenticate requests
 export const authenticateUser = (
-  req: AuthenticatedRequest,
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
