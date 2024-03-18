@@ -6,6 +6,7 @@ import {
   createPost,
   deletePost,
   updatePost,
+  getAllMyPosts,
 } from "../controllers/PostController";
 
 import {
@@ -13,7 +14,7 @@ import {
   login,
   getUser,
   updateUser,
-  getUserById
+  getUserById,
 } from "../controllers/UserController";
 import { uploadImg } from "../controllers/ImageController";
 import multer, { Multer } from "multer";
@@ -29,11 +30,23 @@ cloudinary.v2.config({
 const router = express.Router();
 
 import { authenticateUser } from "../middleware/auth";
-import { createComment, getAllComments,updateComment,deleteComment } from "../controllers/CommentController";
+import {
+  createComment,
+  getAllComments,
+  updateComment,
+  deleteComment,
+} from "../controllers/CommentController";
 
-import { insertNastedComment,getAllNastedComment } from "../controllers/NastedCommentController";
+import {
+  insertNastedComment,
+  getAllNastedComment,
+  deleteNastedComment,
+  updateNastedComment,
+} from "../controllers/NastedCommentController";
 
 router.get("/posts", authenticateUser, getAllPosts);
+router.get("/user/:userId/posts", getAllMyPosts);
+
 router.get("/posts/:id", authenticateUser, getPost);
 router.post(
   "/upload-img",
@@ -41,7 +54,7 @@ router.post(
   uploadImg
 );
 router.post("/posts", authenticateUser, createPost);
-router.put("/posts/:id",authenticateUser, updatePost);
+router.put("/posts/:id", authenticateUser, updatePost);
 router.delete("/posts/:id", authenticateUser, deletePost);
 
 router.post("/register", register);
@@ -51,13 +64,18 @@ router.get("/me", authenticateUser, getUser);
 router.get("/user/:id", authenticateUser, getUserById);
 router.put("/user/:id", authenticateUser, updateUser);
 
+router.post("/comments", authenticateUser, createComment);
+router.get("/posts/:postId/comments", authenticateUser, getAllComments);
+router.put("/comments/:id", authenticateUser, updateComment);
+router.delete("/comments/:id", deleteComment);
 
-router.post("/comments",authenticateUser,createComment)
-router.get("/comments",authenticateUser,getAllComments)
-router.put("/comments/:id",authenticateUser,updateComment)
-router.delete("/comments/:id",deleteComment)
-
-router.post("/nasted-comments",authenticateUser,insertNastedComment)
-router.get("/nasted-comments",authenticateUser,getAllNastedComment)
+router.post("/nasted-comments", authenticateUser, insertNastedComment);
+router.get(
+  "/comments/:commentsId/nasted-comments",
+  authenticateUser,
+  getAllNastedComment
+);
+router.put("/nasted-comments/:id", authenticateUser, updateNastedComment);
+router.delete("/nasted-comments/:id", authenticateUser, deleteNastedComment);
 
 export default router;
