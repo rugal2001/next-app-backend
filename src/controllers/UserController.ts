@@ -50,7 +50,7 @@ export const login = async (req: express.Request, res: express.Response) => {
   if (!validPassword) {
     return res.status(401).send("Invalid data");
   }
-  // console.log("first-name = ",user.firstname);
+  
   const token = jwt.sign({ userId: user.email }, secretKey, {
     expiresIn: "24h",
   });
@@ -118,11 +118,11 @@ export const getUserById = async (
   try {
     const { id } = req.params;
     const user = await UserModel.findById(id);
-    console.log("im inside getUser by id")
+    
     if (!user) {
       return res.status(400).send(`there is no user with the id=${id}`);
     }
-    console.log("this is user ", user)
+    
     res.status(200).json({user});
   } catch (error) {
     res.status(401).json({ message: "error message !" });
