@@ -1,6 +1,14 @@
 import mongoose from "mongoose";
 const NastedCommentSchema = new mongoose.Schema(
   {
+    distinataire_firstName : {
+      type : String,
+      require : false
+    },
+    distinataire_lastName : {
+      type : String,
+      require : false
+    },
     contenue: {
       type: String,
       require: true,
