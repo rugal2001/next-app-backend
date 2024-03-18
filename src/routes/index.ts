@@ -29,6 +29,9 @@ cloudinary.v2.config({
 const router = express.Router();
 
 import { authenticateUser } from "../middleware/auth";
+import { createComment, getAllComments,updateComment,deleteComment } from "../controllers/CommentController";
+
+import { insertNastedComment,getAllNastedComment } from "../controllers/NastedCommentController";
 
 router.get("/posts", authenticateUser, getAllPosts);
 router.get("/posts/:id", authenticateUser, getPost);
@@ -38,7 +41,7 @@ router.post(
   uploadImg
 );
 router.post("/posts", authenticateUser, createPost);
-router.put("/posts/:id", updatePost);
+router.put("/posts/:id",authenticateUser, updatePost);
 router.delete("/posts/:id", authenticateUser, deletePost);
 
 router.post("/register", register);
@@ -47,5 +50,14 @@ router.post("/login", login);
 router.get("/me", authenticateUser, getUser);
 router.get("/user/:id", authenticateUser, getUserById);
 router.put("/user/:id", authenticateUser, updateUser);
+
+
+router.post("/comments",authenticateUser,createComment)
+router.get("/comments",authenticateUser,getAllComments)
+router.put("/comments/:id",authenticateUser,updateComment)
+router.delete("/comments/:id",deleteComment)
+
+router.post("/nasted-comments",authenticateUser,insertNastedComment)
+router.get("/nasted-comments",authenticateUser,getAllNastedComment)
 
 export default router;
