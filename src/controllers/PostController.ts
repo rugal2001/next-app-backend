@@ -3,13 +3,35 @@ import { PostModel } from "../models/post";
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
+////////////////////////////////////////////////////
+
+export const getAllMyPosts = async (
+  request: express.Request,
+  response: express.Response
+) => {
+  try {
+    const { userId } = request.params;
+    const posts = await PostModel.find({ user: userId }).populate(
+      "user",
+      "firstName lastName image"
+    );
+    return response.status(200).json({ data: posts });
+  } catch (error) {
+    return response.status(400);
+  }
+};
+
 //////////////////////////////////////////////////////
 export const getAllPosts = async (
   request: express.Request,
   response: express.Response
 ) => {
   try {
-    const posts = await PostModel.find().populate("user", "firstName lastName image");
+    
+    const posts = await PostModel.find().populate(
+      "user",
+      "firstName lastName image"
+    );
     return response.status(200).json({ data: posts });
   } catch (error) {
     return response.status(400);
@@ -23,7 +45,10 @@ export const getPost = async (
 ) => {
   try {
     const { id } = request.params;
-    const post = await PostModel.findById(id).populate("user","firstName lastName image");
+    const post = await PostModel.findById(id).populate(
+      "user",
+      "firstName lastName image"
+    );
     return response.status(200).json({ data: post });
   } catch (error) {
     return response.status(400);
@@ -40,23 +65,20 @@ export const createPost = async (
       name,
       contenue,
       image,
-      user
+      user,
     });
     await post.save();
     return response.status(200).json({ message: "Post Created", data: post });
   } catch (error) {
-    console.log("there is no data to push");
     return response.status(400);
   }
 };
-
 
 /////////////////////////////////////////////////////////////////////////
 export const updatePost = async (
   request: express.Request,
   response: express.Response
 ) => {
-  console.log("im in update function");
   try {
     const { id } = request.params;
     const { contenue } = request.body;
@@ -85,6 +107,3 @@ export const deletePost = async (
     return response.status(400);
   }
 };
-
-
-

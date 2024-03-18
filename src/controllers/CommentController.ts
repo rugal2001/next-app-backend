@@ -4,7 +4,8 @@ import { CommentModel } from "../models/comment";
 ////////////GET ALL COMMENTS///////////
 export const getAllComments = async (req: Request, res: Response) => {
   try {
-    const comments = await CommentModel.find().populate(
+    const { postId } = req.params;
+    const comments = await CommentModel.find({ post: postId }).populate(
       "user",
       "firstName lastName image"
     );
@@ -18,7 +19,6 @@ export const getAllComments = async (req: Request, res: Response) => {
 ////////////CREATE COMMENT///////////
 export const createComment = async (req: Request, res: Response) => {
   try {
-    console.log("im in backend create comment controller");
     const { contenue, user, post } = req.body;
     const comment = new CommentModel({
       contenue,
