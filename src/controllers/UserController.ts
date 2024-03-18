@@ -52,7 +52,7 @@ export const login = async (req: express.Request, res: express.Response) => {
   }
   // console.log("first-name = ",user.firstname);
   const token = jwt.sign({ userId: user.email }, secretKey, {
-    expiresIn: "1h",
+    expiresIn: "24h",
   });
   const decodedToken = jwt.decode(token);
 
