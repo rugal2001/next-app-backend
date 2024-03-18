@@ -23,7 +23,7 @@ export const getPost = async (
 ) => {
   try {
     const { id } = request.params;
-    const post = await PostModel.findById(id);
+    const post = await PostModel.findById(id).populate("user","firstName lastName image");
     return response.status(200).json({ data: post });
   } catch (error) {
     return response.status(400);
@@ -85,3 +85,6 @@ export const deletePost = async (
     return response.status(400);
   }
 };
+
+
+
