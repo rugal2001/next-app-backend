@@ -2,6 +2,7 @@ import express, { json, urlencoded } from "express";
 import mongoose from "mongoose";
 import router from "./routes";
 import cors from "cors";
+
 const bodyParser = require("body-parser");
 // import { cloudinaryConfig ,uploader } from '../src/utils/cloudinary';
 // import {upload ,  from '../src/middleware/multer'
@@ -24,12 +25,20 @@ app.use(json());
 app.use(cors());
 app.use("/", router);
 
+require('dotenv').config();
+
 /////////////////////////////////////////////////////
 ////////////// DATABASE CONFIGURATION  //////////////
-const MONGO_URL = "mongodb+srv://root:d7Nnl1FmNxVUoKJY@cluster1.jhdo7h3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1";
+
+if (!process.env.MONGODB_URI) {
+  console.error("MONGODB_URI environment variable is not defined.");
+  process.exit(1); // Exit the application if MongoDB URI is not defined
+}
 mongoose
-  .connect(MONGO_URL, {
+  .connect(process.env.MONGODB_URI, {
     dbName: "mern-post",
+  //   useNewUrlParser: true,
+  // useUnifiedTopology: true,
   })
   .then(() => {
     console.log("Database Connected");
