@@ -26,7 +26,7 @@ app.use("/", router);
 
 /////////////////////////////////////////////////////
 ////////////// DATABASE CONFIGURATION  //////////////
-const MONGO_URL = "mongodb://localhost:27017";
+const MONGO_URL = "mongodb+srv://root:d7Nnl1FmNxVUoKJY@cluster1.jhdo7h3.mongodb.net/?retryWrites=true&w=majority&appName=Cluster1";
 mongoose
   .connect(MONGO_URL, {
     dbName: "mern-post",
@@ -35,7 +35,7 @@ mongoose
     console.log("Database Connected");
   })
   .catch((error) => {
-    console.log(error);
+    console.log("Database Error => ",error);
   });
 ///////////////////////////////////////////////////////
 
