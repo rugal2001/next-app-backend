@@ -1,6 +1,7 @@
 import express from "express";
 import bcrypt from "bcryptjs";
-const jwt = require("jsonwebtoken");
+// const jwt = require("jsonwebtoken");
+import jwt from "jsonwebtoken";
 import { UserModel } from "../models/user";
 const secretKey = "123456";
 
@@ -30,6 +31,8 @@ export const register = async (req: express.Request, res: express.Response) => {
 };
 
 interface UserType {
+  _id: string;
+  role: string;
   email: string;
   password: string;
   firstname: string;
@@ -50,13 +53,17 @@ export const login = async (req: express.Request, res: express.Response) => {
   if (!validPassword) {
     return res.status(401).send("Invalid data");
   }
-  
-  const token = jwt.sign({ userId: user.email }, secretKey, {
-    expiresIn: "24h",
-  });
+
+  const token = jwt.sign(
+    { userId: user.email, role: user.role, id: user._id },
+    secretKey,
+    {
+      expiresIn: "24h",
+    }
+  );
   const decodedToken = jwt.decode(token);
 
-  const userId = decodedToken.userId;
+  // const userId = decodedToken?.userId;
 
   res.status(200).json({ access_token: token });
 };
@@ -118,12 +125,12 @@ export const getUserById = async (
   try {
     const { id } = req.params;
     const user = await UserModel.findById(id);
-    
+
     if (!user) {
       return res.status(400).send(`there is no user with the id=${id}`);
     }
-    
-    res.status(200).json({user});
+
+    res.status(200).json({ user });
   } catch (error) {
     res.status(401).json({ message: "error message !" });
   }
