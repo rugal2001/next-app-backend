@@ -20,6 +20,7 @@ import { uploadImg } from "../controllers/ImageController";
 import multer, { Multer } from "multer";
 const storage = multer.memoryStorage();
 import upload from "../middleware/multer";
+import authorizeAdmin from "../middleware/authorizeAdmin";
 
 cloudinary.v2.config({
   cloud_name: "dbwjras14",
@@ -44,6 +45,14 @@ import {
   updateNastedComment,
 } from "../controllers/NastedCommentController";
 
+import {
+  EditPostAuth,
+  DeletePostAuth,
+  EditUserAuth,
+} from "../middleware/authorization";
+
+import { LikePost, UnlikePost } from "../controllers/LikeController";
+
 router.get("/posts", authenticateUser, getAllPosts);
 router.get("/user/:userId/posts", getAllMyPosts);
 
@@ -54,15 +63,15 @@ router.post(
   uploadImg
 );
 router.post("/posts", authenticateUser, createPost);
-router.put("/posts/:id", authenticateUser, updatePost);
-router.delete("/posts/:id", authenticateUser, deletePost);
+router.put("/posts/:id", authenticateUser, EditPostAuth, updatePost);
+router.delete("/posts/:id", authenticateUser, DeletePostAuth, deletePost);
 
 router.post("/register", register);
 router.post("/login", login);
 
 router.get("/me", authenticateUser, getUser);
 router.get("/user/:id", authenticateUser, getUserById);
-router.put("/user/:id", authenticateUser, updateUser);
+router.put("/user/:id", authenticateUser, EditUserAuth, updateUser);
 
 router.post("/comments", authenticateUser, createComment);
 router.get("/posts/:postId/comments", authenticateUser, getAllComments);
@@ -77,5 +86,8 @@ router.get(
 );
 router.put("/nasted-comments/:id", authenticateUser, updateNastedComment);
 router.delete("/nasted-comments/:id", authenticateUser, deleteNastedComment);
+
+router.post("/:type/:id/like", authenticateUser, LikePost);
+router.delete("/:type/:id/like", UnlikePost);
 
 export default router;
