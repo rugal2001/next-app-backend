@@ -13,7 +13,7 @@ export const getAllMyPosts = async (
     const { userId } = request.params;
     const posts = await PostModel.find({ user: userId }).populate(
       "user",
-      "firstName lastName image"
+      "firstName lastName image like"
     );
     return response.status(200).json({ data: posts });
   } catch (error) {
@@ -28,9 +28,10 @@ export const getAllPosts = async (
 ) => {
   try {
     
+
     const posts = await PostModel.find().populate(
       "user",
-      "firstName lastName image"
+      "firstName lastName image like"
     );
     return response.status(200).json({ data: posts });
   } catch (error) {
@@ -47,7 +48,7 @@ export const getPost = async (
     const { id } = request.params;
     const post = await PostModel.findById(id).populate(
       "user",
-      "firstName lastName image"
+      "email firstName lastName image likeCount"
     );
     return response.status(200).json({ data: post });
   } catch (error) {
@@ -81,7 +82,7 @@ export const updatePost = async (
 ) => {
   try {
     const { id } = request.params;
-    const { contenue } = request.body;
+    const { contenue ,like } = request.body;
 
     const post = await PostModel.findById(id);
     if (post) {
