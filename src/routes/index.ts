@@ -33,6 +33,7 @@ const router = express.Router();
 import { authenticateUser } from "../middleware/auth";
 import {
   createComment,
+  createNastedComment,
   getAllComments,
   updateComment,
   deleteComment,
@@ -71,10 +72,13 @@ router.post("/login", login);
 
 router.get("/me", authenticateUser, getUser);
 router.get("/user/:id", authenticateUser, getUserById);
-router.put("/user/:id", authenticateUser, EditUserAuth, updateUser);
+// router.put("/user/:id", authenticateUser, EditUserAuth, updateUser);
+router.put("/user/:id", updateUser);
 
 router.post("/comments", authenticateUser, createComment);
+router.post("/:commentId/reply/:postId", authenticateUser, createNastedComment);
 router.get("/posts/:postId/comments", authenticateUser, getAllComments);
+
 router.put("/comments/:id", authenticateUser, updateComment);
 router.delete("/comments/:id", deleteComment);
 
