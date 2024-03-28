@@ -104,10 +104,7 @@ export const updateUser = async (
       user.lastName = lastName;
       user.email = email;
       user.role = role;
-      if (image) {
-        user.image = image;
-      }
-
+      user.image = image;
       await user.save();
       return res.status(201).json({ message: "user updated succeffully" });
     }
