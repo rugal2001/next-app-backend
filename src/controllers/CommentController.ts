@@ -10,11 +10,13 @@ export const getAllComments = async (req: Request, res: Response) => {
   try {
     const { postId } = req.params;
 
-    const comments = await CommentModel.find({ post: postId })
-      .populate({
-        path: "user",
-        select: "firstName lastName image",
-      });
+    const comments = await CommentModel.find({
+      post: postId,
+      parentComment: { $eq: null },
+    }).populate({
+      path: "user",
+      select: "firstName lastName image",
+    });
 
     return res.status(200).json({ data: comments });
   } catch (error) {
