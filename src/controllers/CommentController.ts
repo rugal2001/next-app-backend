@@ -1,40 +1,71 @@
 import express, { Request, Response } from "express";
 import { CommentModel } from "../models/comment";
+import { populate } from "dotenv";
+import mongoose from "mongoose";
 
 ////////////GET ALL COMMENTS///////////
+// Recursive function to populate nested replies
+
 export const getAllComments = async (req: Request, res: Response) => {
   try {
     const { postId } = req.params;
-    const comments = await CommentModel.find({ post: postId }).populate(
-      "user",
-      "firstName lastName image"
-    );
+
+    const comments = await CommentModel.find({ post: postId })
+      .populate({
+        path: "user",
+        select: "firstName lastName image",
+      });
+
     return res.status(200).json({ data: comments });
   } catch (error) {
+    console.log("error ", error);
     return res.status(400).json({ message: "error in finding comments !!" });
   }
 };
+
 //////////////////_///////////////////
 
 ////////////CREATE COMMENT///////////
 export const createComment = async (req: Request, res: Response) => {
   try {
-    const { contenue, user, post } = req.body;
-    const comment = new CommentModel({
-      contenue,
-      user,
+    const { post } = req.body;
+    const { contenue } = req.body;
+    let commentObj = {
+      user: req.body.user,
       post,
-    });
+      contenue: contenue,
+    };
 
-    await comment.save();
+    const commentReply = await new CommentModel(commentObj).save();
     return res
       .status(200)
-      .json({ message: "comment inserted successffully", data: comment });
+      .json({ message: "comment inserted successffully", data: commentReply });
   } catch (error) {
     return res.status(400);
   }
 };
 //////////////////_///////////////////
+
+export const createNastedComment = async (req: Request, res: Response) => {
+  try {
+    const { commentId, postId } = req.params;
+    const replyText = req.body.contenue;
+    const replyObj = {
+      user: req.body.user,
+      post: postId,
+      contenue: replyText,
+      parentComment: commentId,
+    };
+    const newReply = await new CommentModel(replyObj).save();
+    await CommentModel.findOneAndUpdate(
+      { _id: commentId, post: postId },
+      { $push: { replies: newReply._id } }
+    );
+    return res
+      .status(200)
+      .json({ message: "comment inserted successffully", data: newReply });
+  } catch (error) {}
+};
 
 ////////////UPDATE COMMENT///////////
 export const updateComment = async (req: Request, res: Response) => {
