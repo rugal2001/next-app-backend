@@ -54,7 +54,7 @@ import {
 
 import { LikePost, UnlikePost } from "../controllers/LikeController";
 
-router.get("/posts", authenticateUser, getAllPosts);
+router.get(`/posts`, authenticateUser, getAllPosts);
 router.get("/user/:userId/posts", getAllMyPosts);
 
 router.get("/posts/:id", authenticateUser, getPost);
