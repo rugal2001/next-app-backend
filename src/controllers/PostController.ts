@@ -22,22 +22,34 @@ export const getAllMyPosts = async (
 };
 
 //////////////////////////////////////////////////////
+
+import { Request, Response } from 'express';
+
 export const getAllPosts = async (
-  request: express.Request,
-  response: express.Response
+  request: Request,
+  response: Response
 ) => {
   try {
-    
+    let { _page, _limit } = request.query;
+    const page = parseInt(_page as string, 10) || 1;
+    const limit = parseInt(_limit as string, 10) || 10; 
 
-    const posts = await PostModel.find().populate(
-      "user",
-      "firstName lastName image like"
-    );
-    return response.status(200).json({ data: posts });
+    const totalCount = await PostModel.countDocuments();
+    const totalPages = Math.ceil(totalCount / limit);
+
+    const posts = await PostModel.find()
+      .populate("user", "firstName lastName image like")
+      .skip((page - 1) * limit)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    return response.status(200).json({ data: posts, totalCount, totalPages });
   } catch (error) {
-    return response.status(400);
+    console.error("Error fetching posts:", error);
+    return response.status(500).json({ error: "Internal Server Error" });
   }
 };
+
 ////////////////////////////////////////////////////////
 
 export const getPost = async (
