@@ -44,6 +44,8 @@ export const login = async (req: express.Request, res: express.Response) => {
   const users: UserType[] = await UserModel.find();
   const user = await users.find((u) => u.email === email);
 
+  const existedUser = await UserModel.findOne({email});
+
   if (!user) {
     return res.status(401).send("No User Found");
   }
@@ -61,11 +63,10 @@ export const login = async (req: express.Request, res: express.Response) => {
       expiresIn: "24h",
     }
   );
-  const decodedToken = jwt.decode(token);
+  // const decodedToken = jwt.decode(token);
 
-  // const userId = decodedToken?.userId;
 
-  res.status(200).json({ access_token: token });
+  res.status(200).json({ access_token: token, user: existedUser });
 };
 
 export const getUser = async (req: express.Request, res: express.Response) => {
