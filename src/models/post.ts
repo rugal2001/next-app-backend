@@ -22,6 +22,10 @@ const PostSchema = new mongoose.Schema(
       ref: "user", // Reference to the UserModel
       required: true,
     },
+    numberOfComments: {
+      type: Number,
+      default: 0,
+    },
   },
   { timestamps: true }
 );
