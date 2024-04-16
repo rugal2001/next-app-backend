@@ -23,16 +23,13 @@ export const getAllMyPosts = async (
 
 //////////////////////////////////////////////////////
 
-import { Request, Response } from 'express';
+import { Request, Response } from "express";
 
-export const getAllPosts = async (
-  request: Request,
-  response: Response
-) => {
+export const getAllPosts = async (request: Request, response: Response) => {
   try {
     let { _page, _limit } = request.query;
     const page = parseInt(_page as string, 10) || 1;
-    const limit = parseInt(_limit as string, 10) || 10; 
+    const limit = parseInt(_limit as string, 10) || 10;
 
     const totalCount = await PostModel.countDocuments();
     const totalPages = Math.ceil(totalCount / limit);
@@ -43,7 +40,7 @@ export const getAllPosts = async (
       .limit(limit)
       .sort({ createdAt: -1 });
 
-    return response.status(200).json({ data: posts, totalCount, totalPages });
+    return response.status(200).json({ data: posts });
   } catch (error) {
     console.error("Error fetching posts:", error);
     return response.status(500).json({ error: "Internal Server Error" });
@@ -73,12 +70,13 @@ export const createPost = async (
   response: express.Response
 ) => {
   try {
-    const { name, contenue, image, user } = request.body;
+    const { name, contenue, image, user, numberOfComments } = request.body;
     const post = new PostModel({
       name,
       contenue,
       image,
       user,
+      numberOfComments,
     });
     await post.save();
     return response.status(200).json({ message: "Post Created", data: post });
@@ -94,17 +92,23 @@ export const updatePost = async (
 ) => {
   try {
     const { id } = request.params;
-    const { contenue ,like } = request.body;
+    const { contenue, like, numberOfComments } = request.body;
 
-    const post = await PostModel.findById(id);
-    if (post) {
-      post.contenue = contenue;
-      await post.save();
+    const post = await PostModel.findByIdAndUpdate(
+      id,
+      { contenue, like, numberOfComments },
+      { new: true } // Return the updated document
+    );
+
+    console.log({numberOfComments})
+    if (!post) {
+      return response.status(404).json({ message: "Post not found" });
     }
 
     return response.status(200).json({ message: "Post Updated", data: post });
   } catch (error) {
-    return response.status(400);
+    console.error("Error updating post:", error);
+    return response.status(500).json({ message: "Internal Server Error" });
   }
 };
 /////////////////////////////////////////////////////////////////////////////
