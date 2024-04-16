@@ -53,8 +53,9 @@ import {
 } from "../middleware/authorization";
 
 import { LikePost, UnlikePost } from "../controllers/LikeController";
+import { createActivity, getAllActivities } from "../controllers/ActivityController";
 
-router.get(`/posts`, authenticateUser, getAllPosts);
+router.get(`/posts`, getAllPosts);
 router.get("/user/:userId/posts", getAllMyPosts);
 
 router.get("/posts/:id", authenticateUser, getPost);
@@ -93,5 +94,8 @@ router.delete("/nasted-comments/:id", authenticateUser, deleteNastedComment);
 
 router.post("/:type/:id/like", authenticateUser, LikePost);
 router.delete("/:type/:id/like", UnlikePost);
+
+router.post("/activity",authenticateUser,createActivity);
+router.get("/activity/:id",authenticateUser,getAllActivities);
 
 export default router;
