@@ -27,6 +27,8 @@ export const getAllComments = async (req: Request, res: Response) => {
 
 //////////////////_///////////////////
 
+// export const getComment
+
 ////////////CREATE COMMENT///////////
 export const createComment = async (req: Request, res: Response) => {
   try {
@@ -93,8 +95,8 @@ export const deleteComment = async (req: Request, res: Response) => {
   try {
     const { id } = req.params;
 
-    await CommentModel.findByIdAndDelete({ _id: id });
-    return res.status(200).json({ message: "Comment deleted successfully" });
+    const deletedComment = await CommentModel.findByIdAndDelete({ _id: id });
+    return res.status(200).json({ message: "Comment deleted successfully",data:deletedComment });
   } catch (error) {
     return res.status(400).json({ message: "Error in deleting the comment" });
   }
