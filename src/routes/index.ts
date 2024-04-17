@@ -96,6 +96,6 @@ router.post("/:type/:id/like", authenticateUser, LikePost);
 router.delete("/:type/:id/like", UnlikePost);
 
 router.post("/activity",authenticateUser,createActivity);
-router.get("/activity/:id",authenticateUser,getAllActivities);
+router.get("/activity/:postId",authenticateUser,getAllActivities);
 
 export default router;
