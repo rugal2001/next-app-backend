@@ -28,7 +28,8 @@ export const getAllActivities = async (req: Request, res: Response) => {
       path: "user",
       select: "firstName lastName image",
     });
-    console.log({ activities });
+    
+    // console.log((date)-(activities.submitTime))
     return res.status(200).json({ data: activities });
   } catch (error) {
     console.log("error ", error);
