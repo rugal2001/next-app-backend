@@ -30,7 +30,7 @@ export const getAllActivities = async (req: Request, res: Response) => {
     });
     
     // console.log((date)-(activities.submitTime))
-    return res.status(200).json({ data: activities });
+    return res.status(200).json({ data: activities.reverse() });
   } catch (error) {
     console.log("error ", error);
     return res.status(400).json({ message: "error in finding activities !!" });
