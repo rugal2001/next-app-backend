@@ -78,7 +78,8 @@ export const updateComment = async (req: Request, res: Response) => {
     const { contenue } = req.body;
     const comment = await CommentModel.findById(id);
     if (comment) {
-      (comment.contenue = contenue), await comment.save();
+      ((comment.contenue = contenue)),
+        await comment.save();
     }
 
     return res
@@ -96,7 +97,9 @@ export const deleteComment = async (req: Request, res: Response) => {
     const { id } = req.params;
 
     const deletedComment = await CommentModel.findByIdAndDelete({ _id: id });
-    return res.status(200).json({ message: "Comment deleted successfully",data:deletedComment });
+    return res
+      .status(200)
+      .json({ message: "Comment deleted successfully", data: deletedComment });
   } catch (error) {
     return res.status(400).json({ message: "Error in deleting the comment" });
   }
