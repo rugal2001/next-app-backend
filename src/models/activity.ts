@@ -4,23 +4,34 @@ const ActivitySchema = new mongoose.Schema(
     eventType: {
       type: String,
       require: true,
-      enum : ['post_created','post_updated','comment_created','comment_updated','comment_deleted']
+      enum: [
+        "post_created",
+        "post_updated",
+        "post_deleted",
+        "comment_created",
+        "comment_updated",
+        "comment_deleted",
+      ],
     },
-    submitTime: {
-      type: Date,
-      require: true,
-    },
-    post: {
-      type: mongoose.Schema.Types.ObjectId,
+    post:{
+      type : mongoose.Schema.Types.ObjectId,
       ref:"post",
-      required:true,
+      require : true
+    },
+    oldData: {
+      type: Object,
+      default: {},
+    },
+    comment: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref:"comment",
+      default: {},
     },
     user: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user", // Reference to the UserModel
       required: true,
-    }
-    
+    },
   },
   { timestamps: true }
 );
