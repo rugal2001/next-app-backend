@@ -29,15 +29,18 @@ const CommentSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
-function populateReplies(comment: any, depth: number) : mongoose.PopulateOptions {
+function populateReplies(
+  comment: any,
+  depth: number
+): mongoose.PopulateOptions {
   if (depth <= 0) return;
-  
+
   return comment.populate({
     path: "replies",
     populate: {
       path: "user",
       select: "firstName lastName image",
-      populate: (depth > 1) ? populateReplies(comment, depth - 1) : null,
+      populate: depth > 1 ? populateReplies(comment, depth - 1) : null,
     },
   });
 }
@@ -47,9 +50,12 @@ CommentSchema.pre("find", function (next) {
     populate: {
       path: "user",
       select: "firstName lastName image",
-      populate: (this as any)._mongooseOptions.populate?.depth ?
-        populateReplies(this, (this as any)._mongooseOptions.populate.depth - 1) :
-        null,
+      populate: (this as any)._mongooseOptions.populate?.depth
+        ? populateReplies(
+            this,
+            (this as any)._mongooseOptions.populate.depth - 1
+          )
+        : null,
     },
   });
   next();
