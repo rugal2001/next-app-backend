@@ -2,17 +2,20 @@ import express, { Request, Response } from "express";
 import { ActivityModel } from "../models/activity";
 
 export const createActivity = async (req: Request, res: Response) => {
+  console.log("im here");
   try {
-    const { eventType, post, user, submitTime } = req.body;
+    const { eventType, user ,oldData,post,comment} = req.body;
 
     let activityObj = {
-      post,
-      submitTime,
-      eventType,
+      eventType: eventType,
       user,
+      oldData,
+      post,
+      comment
     };
+    console.log({ eventType, user,oldData,post,comment });
     const activity = await new ActivityModel(activityObj).save();
-
+    console.log({ activity });
     return res
       .status(200)
       .json({ message: "Activity saved successffully", data: activity });
@@ -24,11 +27,20 @@ export const createActivity = async (req: Request, res: Response) => {
 export const getAllActivities = async (req: Request, res: Response) => {
   try {
     const { postId } = req.params;
-    const activities = await ActivityModel.find({ post: postId }).populate({
-      path: "user",
-      select: "firstName lastName image",
-    });
-    
+    const activities = await ActivityModel.find({ post: postId })
+      .populate({
+        path: "user",
+        select: "firstName lastName image",
+      })
+      .populate({
+        path: "comment",
+        select: "contenue",
+      })
+      .populate({
+        path: "post",
+        select: "contenue",
+      });
+
     // console.log((date)-(activities.submitTime))
     return res.status(200).json({ data: activities.reverse() });
   } catch (error) {
