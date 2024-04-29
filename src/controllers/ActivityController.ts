@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 import { ActivityModel } from "../models/activity";
+import mongoose from "mongoose";
 
 export const createActivity = async (req: Request, res: Response) => {
   console.log("im here");
@@ -11,11 +12,14 @@ export const createActivity = async (req: Request, res: Response) => {
       user,
       oldData,
       post,
-      comment
+      comment,
+      
     };
-    console.log({ eventType, user,oldData,post,comment });
+    const data=post;
+    // console.log({ eventType, user,oldData,post,comment,data });
+    // console.log("==========>",oldData.data);
     const activity = await new ActivityModel(activityObj).save();
-    console.log({ activity });
+    // console.log({ activity });
     return res
       .status(200)
       .json({ message: "Activity saved successffully", data: activity });
@@ -28,6 +32,7 @@ export const getAllActivities = async (req: Request, res: Response) => {
   try {
     const { postId } = req.params;
     const activities = await ActivityModel.find({ post: postId })
+    // const activities = await ActivityModel.find({ post: new mongoose.Types.ObjectId(postId) })
       .populate({
         path: "user",
         select: "firstName lastName image",
@@ -40,6 +45,10 @@ export const getAllActivities = async (req: Request, res: Response) => {
         path: "post",
         select: "contenue",
       });
+
+      // console.log(postId);
+      // console.log(activities);
+      
 
     // console.log((date)-(activities.submitTime))
     return res.status(200).json({ data: activities.reverse() });
