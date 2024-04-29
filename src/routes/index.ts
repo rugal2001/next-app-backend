@@ -15,6 +15,8 @@ import {
   getUser,
   updateUser,
   getUserById,
+  getUsers,
+  deleteUser
 } from "../controllers/UserController";
 import { uploadImg } from "../controllers/ImageController";
 import multer, { Multer } from "multer";
@@ -77,7 +79,9 @@ router.post("/login", login);
 router.get("/me", authenticateUser, getUser);
 router.get("/user/:id", authenticateUser, getUserById);
 // router.put("/user/:id", authenticateUser, EditUserAuth, updateUser);
-router.put("/user/:id", updateUser);
+router.put("/user/:id",authenticateUser, updateUser);
+router.get("/user",authenticateUser, getUsers);
+router.delete("/user/:userId",authenticateUser, deleteUser);
 
 router.post("/comments", authenticateUser, createComment);
 router.post("/:commentId/reply/:postId", authenticateUser, createNastedComment);
