@@ -16,15 +16,21 @@ const ActivitySchema = new mongoose.Schema(
     post:{
       type : mongoose.Schema.Types.ObjectId,
       ref:"post",
-      require : true
+      require : true,
+      // default:{}
     },
+
+    // data: {
+    //   type: Object,
+    //   default: {},
+    // },
     oldData: {
       type: Object,
       default: {},
     },
     comment: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref:"comment",
+      type: Object,
+      // ref:"comment",
       default: {},
     },
     user: {
