@@ -7,7 +7,7 @@ const secretKey = "123456";
 
 export const register = async (req: express.Request, res: express.Response) => {
   try {
-    const { firstName, lastName, email, password, role } = req.body;
+    const { firstName, lastName, email, password } = req.body;
     const users: UserType[] = await UserModel.find();
     const userCheck = await users.find((u) => u.email === email);
     if (userCheck) {
@@ -20,7 +20,7 @@ export const register = async (req: express.Request, res: express.Response) => {
       lastName,
       email,
       password: hashedPassword,
-      role,
+      
     });
 
     await user.save();
@@ -44,7 +44,7 @@ export const login = async (req: express.Request, res: express.Response) => {
   const users: UserType[] = await UserModel.find();
   const user = await users.find((u) => u.email === email);
 
-  const existedUser = await UserModel.findOne({email});
+  const existedUser = await UserModel.findOne({ email });
 
   if (!user) {
     return res.status(401).send("No User Found");
@@ -64,7 +64,6 @@ export const login = async (req: express.Request, res: express.Response) => {
     }
   );
   // const decodedToken = jwt.decode(token);
-
 
   res.status(200).json({ access_token: token, user: existedUser });
 };
@@ -131,5 +130,32 @@ export const getUserById = async (
     res.status(200).json({ user });
   } catch (error) {
     res.status(401).json({ message: "error message !" });
+  }
+};
+
+export const getUsers = async (req: express.Request, res: express.Response) => {
+  try {
+    console.log("im inside getUsers");
+    const users = await UserModel.find({}, { password: 0 });
+
+    console.log("im inside getUsers ==> ", { users });
+    return res.status(200).json({ data: users });
+  } catch (error) {
+    console.log({ error });
+
+    return res.status(400).json({ error });
+  }
+};
+
+export const deleteUser = async (
+  req: express.Request,
+  res: express.Response
+) => {
+  try {
+    const { userId } = req.params;
+    const user = await UserModel.findByIdAndDelete({ _id: userId });
+    return res.status(200).json("user deleted successffully !!");
+  } catch (error) {
+    return res.status(400).json({ error });
   }
 };
