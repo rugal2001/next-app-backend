@@ -17,7 +17,7 @@ export const LikePost = async (req: Request, res: Response) => {
     await PostModel.findByIdAndUpdate(req.params.id, { $inc: { likeCount: 1 } });
     res.status(200).json({ newLike });
   } catch (error) {
-    console.log('im in catch')
+    
     res.status(500).json({ error });
   }
 };
